@@ -1,35 +1,27 @@
-# ----------------------
-# Stage 1: Build the application
-# ----------------------
+# Stage 1: Build
 FROM maven:3.9.3-eclipse-temurin-17 AS build
-
-# Set working directory
 WORKDIR /app
 
-# Copy pom.xml and download dependencies (cached)
+# Copy pom and download dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
 # Copy source code
 COPY src ./src
 
-# Build the jar without running tests
+# Build jar without tests
 RUN mvn clean package -DskipTests
 
-# ----------------------
-# Stage 2: Run the application
-# ----------------------
+# Stage 2: Run
 FROM openjdk:17-jdk-slim
-
-# Set working directory
 WORKDIR /app
 VOLUME /tmp
 
-# Copy the jar from build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the specific jar from build stage
+COPY --from=build /app/target/harpale-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose application port
+# Expose port (dynamic PORT for Clever Cloud)
 EXPOSE 8090
 
-# Start the application with dynamic port (e.g., Render platform)
+# Start the app with dynamic port
 ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8090} -jar app.jar"]
