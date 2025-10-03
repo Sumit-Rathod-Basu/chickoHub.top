@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - ChickoHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-yellow-50 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-yellow-600 p-4 shadow-lg flex justify-between items-center sticky top-0 z-50">
+        <h1 class="text-2xl font-bold text-white">🐔 ChickoHub</h1>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+            <a href="/" class="hover:text-gray-200">Home</a>
+            <a href="/menu" class="hover:text-gray-200">Menu</a>
+            <a href="/offers" class="hover:text-gray-200">Offers</a>
+            <a href="/about" class="hover:text-gray-200">About Us</a>
+            <a href="/contact" class="hover:text-gray-200">Contact</a>
+        </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+            <i class="fas fa-bars fa-2x"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden bg-yellow-500 text-white flex flex-col space-y-4 p-6 md:hidden">
+        <a href="/" class="hover:text-gray-200" onclick="closeMenu()">Home</a>
+        <a href="/menu" class="hover:text-gray-200" onclick="closeMenu()">Menu</a>
+        <a href="/offers" class="hover:text-gray-200" onclick="closeMenu()">Offers</a>
+        <a href="/about" class="hover:text-gray-200" onclick="closeMenu()">About Us</a>
+        <a href="/contact" class="hover:text-gray-200" onclick="closeMenu()">Contact</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="text-center py-12 bg-yellow-100">
+        <h2 class="text-4xl font-extrabold text-yellow-800">Our Delicious Menu 🍗</h2>
+        <p class="text-gray-700 mt-2">Choose from our wide range of fresh chicken cuts & dishes.</p>
+    </section>
+
+    <!-- Menu Grid -->
+    <section class="max-w-6xl mx-auto py-12 px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/6QYhFXhh/bon.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Chicken Breast</h3>
+            <p class="text-gray-600 mt-2">Boneless, juicy, protein-packed.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/yNYGDnQv/wing.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Chicken Wings</h3>
+            <p class="text-gray-600 mt-2">Crispy & spicy goodness.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/C5ZJjQks/chicken-curry-480g-to-500g.jpg" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Curry Cut</h3>
+            <p class="text-gray-600 mt-2">Perfect for curries & gravies.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+         <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/pLKGG470/whol.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Whole Chicken</h3>
+            <p class="text-gray-600 mt-2">Fresh whole chicken, perfect for family meals or special recipes.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/sDgt970w/leg.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Chicken Leg pice</h3>
+            <p class="text-gray-600 mt-2">Freshly cut chicken pieces perfect for your favorite curry recipes.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+                        <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/6p7D58FP/drm.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Chicken Drumstick</h3>
+            <p class="text-gray-600 mt-2">Tender, boneless chicken breast for grilling or stir-fry dishes.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+                                <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/q7ySy9JX/liv.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Chicken Liver</h3>
+            <p class="text-gray-600 mt-2">Juicy chicken thighs, ideal for roasting or barbecuing.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+                                        <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:scale-105 transition">
+            <img src="https://i.postimg.cc/T3ZByR63/chicken-thigh02.webp" class="rounded-xl w-full h-48 object-cover">
+            <h3 class="text-xl font-bold text-yellow-700 mt-4">Thai Boneless Chicken</h3>
+            <p class="text-gray-600 mt-2">Fresh whole chicken, perfect for family meals or special recipes.</p>
+            <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">Order Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-yellow-600 text-white text-center py-6 mt-12">
+        <p>&copy; 2025 ChickoHub | Fresh Chicken Delivered with Love ❤️</p>
+    </footer>
+
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function closeMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+    </script>
+
+</body>
+</html>

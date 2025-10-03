@@ -1,0 +1,675 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chicken Ordering Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Custom Animations & Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --secondary: #fef3c7;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Hero fade in */
+        .fade-in { 
+            animation: fadeIn 1.5s ease-in-out; 
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        /* Card hover grow */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Glowing Order button */
+        .glow-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .glow-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .glow-btn:hover:before {
+            left: 100%;
+        }
+        
+        .glow-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero background overlay */
+        .hero-section {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Hamburger icon animation */
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: white;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Loading animation for images */
+        .image-loading {
+            background: linear-gradient(90deg, #f566d6 25%, #ffffff 50%, #f8f8f8 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Pulse animation for special offers */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="bg-yellow-50 font-sans">
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-yellow-600 p-4 shadow-lg flex justify-between items-center sticky top-0 z-50">
+   
+    <h1 class="text-2xl font-bold text-white flex items-center">
+        <i class="fas fa-drumstick-bite mr-2"></i> ChickoHub
+    </h1>
+
+
+       
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6 text-white font-medium">
+            <a href="/" class="hover:text-gray-200 transition duration-300">Home</a>
+            <a href="/menu" class="hover:text-gray-200 transition duration-300">Menu</a>
+            <a href="/offers" class="hover:text-gray-200 transition duration-300">Offers</a>
+            <a href="/about" class="hover:text-gray-200 transition duration-300">About Us</a>
+            <a href="/contact" class="hover:text-gray-200 transition duration-300">Contact</a>
+            
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+            <button id="mobileMenuButton" class="hamburger text-white focus:outline-none">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-yellow-600 z-40 flex flex-col items-center justify-center space-y-8 text-white text-xl font-medium md:hidden">
+        <a href="/" class="hover:text-gray-200 transition duration-300 py-2">Home</a>
+        <a href="/menu" class="hover:text-gray-200 transition duration-300 py-2">Menu</a>
+        <a href="/offers" class="hover:text-gray-200 transition duration-300 py-2">Offers</a>
+        <a href="/about" class="hover:text-gray-200 transition duration-300 py-2">About Us</a>
+        <a href="/contact" class="hover:text-gray-200 transition duration-300 py-2">Contact</a>
+  
+        <button id="closeMobileMenu" class="absolute top-4 right-4 text-2xl">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Hero with background -->
+    <section class="hero-section text-center py-24 fade-in">
+        <div class="py-16 px-6">
+            <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
+                Fresh Chicken Delivered 🍗
+            </h2>
+            <p class="text-lg md:text-xl text-gray-200 mb-6 max-w-2xl mx-auto">
+                Fast, fresh & hygienic chicken cuts delivered to your doorstep. Order now and get 10% off on your first order!
+            </p>
+
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <a href="/menu" class="glow-btn">🚀 Order Now</a>
+                <a href="#featured" class="bg-transparent border-2 border-white text-white px-6 py-2 rounded-full font-medium hover:bg-white hover:text-yellow-700 transition duration-300">View Menu</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Section -->
+    <section class="bg-yellow-100 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-yellow-800 mb-8">🔥 Today's Special Offers</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-lg pulse border-2 border-yellow-400">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">HOT</span>
+                        <span class="text-yellow-700 font-bold">10% OFF</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-700">Family Pack</h3>
+                    <p class="text-gray-600 mt-2">Get 2kg chicken at discounted price. Perfect for family dinners.</p>
+<div class="mt-4 flex justify-between items-center">
+    <span class="text-lg font-bold text-yellow-700">
+        ₹400
+        <span class="text-sm text-gray-500 line-through">₹600</span>
+    </span>
+    <a href="/order" 
+       class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-bold hover:bg-yellow-600 transition duration-300 inline-flex items-center justify-center">
+       Order
+    </a>
+</div>
+
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg pulse border-2 border-yellow-400">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">NEW</span>
+                        <span class="text-yellow-700 font-bold">BUY NOW</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-700">Chicken Wings</h3>
+                    <p class="text-gray-600 mt-2">Buy 1kg chicken wings only 249. Limited time offer!</p>
+<div class="mt-4 flex justify-between items-center">
+    <span class="text-lg font-bold text-yellow-700">
+        ₹249
+        <span class="text-sm text-gray-500 line-through">₹300</span>
+    </span>
+    <a href="/order" 
+       class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-bold hover:bg-yellow-600 transition duration-300 inline-flex items-center justify-center">
+       Order
+    </a>
+</div>
+
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg pulse border-2 border-yellow-400">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">DEAL</span>
+                        <span class="text-yellow-700 font-bold">FREE DELIVERY</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-700">Weekend Special</h3>
+                    <p class="text-gray-600 mt-2">Order above ₹600 and get free delivery. Valid only on weekends.</p>
+<div class="mt-4 flex justify-between items-center">
+    <span class="text-lg font-bold text-yellow-700">
+        ₹
+        <span class="text-sm text-gray-500 line-through">₹800</span>
+    </span>
+    <a href="/order" 
+       class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-bold hover:bg-yellow-600 transition duration-300 inline-flex items-center justify-center">
+       Order
+    </a>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Menu with Order Now on each card -->
+   <section id="featured" class="max-w-6xl mx-auto py-16 px-6">
+    <h2 class="text-3xl font-bold text-center text-yellow-800 mb-12">🍗 Our Popular Items</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Chicken Curry Cut -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/C5ZJjQks/chicken-curry-480g-to-500g.jpg"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Curry">
+                <span class="absolute top-4 right-4 bg-yellow-500 text-white px-2 py-1 rounded-full text-sm font-bold">Bestseller</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Curry Cut</h3>
+                <p class="text-gray-600 mt-2">Fresh curry-cut chicken, ready to cook. Perfect for your favorite curry recipes.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹199/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Curry Cut%20I%20want%20to%20order%20Chicken%20Curry%20Cut%20🍛"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chicken Wings -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/yNYGDnQv/wing.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Wings">
+                <span class="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-bold">Hot</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Wings</h3>
+                <p class="text-gray-600 mt-2">Crispy, juicy wings for your cravings. Ideal for parties and snacks.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹249/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plses order Chicken wings%20I%20want%20to%20order%20Chicken%20Wings%20🍗"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chicken Breast -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/6QYhFXhh/bon.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Breast</h3>
+                <p class="text-gray-600 mt-2">Boneless, skinless & high protein. Great for fitness enthusiasts.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹299/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Breast%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+        <!-- Chicken Whole -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/pLKGG470/whol.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Whole Chicken</h3>
+                <p class="text-gray-600 mt-2">Fresh whole chicken, perfect for family meals or special recipes.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹179/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken whole%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+             <!-- Chicken Leg pice -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/sDgt970w/leg.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Leg pice</h3>
+                <p class="text-gray-600 mt-2">Freshly cut chicken pieces perfect for your favorite curry recipes.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹199/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Leg pice%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+          <!-- Chicken Leg pice -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/pLKGG470/whol.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Drumstick</h3>
+                <p class="text-gray-600 mt-2">Tender, boneless chicken breast for grilling or stir-fry dishes.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹299/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Drumstick%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+          <!-- Chicken Liver -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/q7ySy9JX/liv.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Chicken Liver</h3>
+                <p class="text-gray-600 mt-2">Juicy chicken thighs, ideal for roasting or barbecuing.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹249/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Liver%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+          <!-- Chicken Liver -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="relative overflow-hidden">
+                <img src="https://i.postimg.cc/6p7D58FP/drm.webp"
+                     class="w-full h-48 object-cover transition duration-500 hover:scale-110" alt="Chicken Breast">
+                <span class="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-sm font-bold">Healthy</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-yellow-700">Thai Boneless Chicken</h3>
+                <p class="text-gray-600 mt-2">Fresh whole chicken, perfect for family meals or special recipes.</p>
+                <span class="block text-lg font-bold text-yellow-700 mb-3">₹179/kg</span>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="https://wa.me/919850695068?text=Hello plase order Chicken Bonwless%20I%20want%20to%20order%20Chicken%20Breast%20🥩"
+                       target="_blank" class="glow-btn text-center">📲 Order via WhatsApp</a>
+                    <a href="tel:+919850695068"
+                       class="glow-btn text-center bg-green-600 hover:bg-green-700">📞 Order by Call</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+    <!-- Why Choose Us Section -->
+    <section class="bg-yellow-600 text-white py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Why Choose ChickoHub?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 floating">
+                        <i class="fas fa-shipping-fast text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Fast Delivery</h3>
+                    <p class="text-yellow-100">Delivery within 30 minutes in selected areas</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 floating" style="animation-delay: 0.5s;">
+                        <i class="fas fa-leaf text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Fresh & Quality</h3>
+                    <p class="text-yellow-100">100% fresh and hygienically processed chicken</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 floating" style="animation-delay: 1s;">
+                        <i class="fas fa-tag text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Best Price</h3>
+                    <p class="text-yellow-100">Competitive prices with regular discounts</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 floating" style="animation-delay: 1.5s;">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
+                    <p class="text-yellow-100">Round the clock customer support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-yellow-800 text-white py-12">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-drumstick-bite mr-2"></i> ChickoHub
+                </h3>
+                <p class="text-yellow-200">Fresh chicken delivered to your doorstep with love and care.</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-yellow-200 hover:text-white transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-yellow-200 hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-yellow-200 hover:text-white transition duration-300"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="/" class="text-yellow-200 hover:text-white transition duration-300">Home</a></li>
+                    <li><a href="/menu" class="text-yellow-200 hover:text-white transition duration-300">Menu</a></li>
+                    <li><a href="/offers" class="text-yellow-200 hover:text-white transition duration-300">Offers</a></li>
+                    <li><a href="/about" class="text-yellow-200 hover:text-white transition duration-300">About Us</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> pune</li>
+                  
+                </ul>
+            </div>
+            
+
+        </div>
+        
+        <div class="border-t border-yellow-700 mt-8 pt-6 text-center text-yellow-200">
+            <p>&copy; 2025 ChickoHub | Fresh Chicken Delivered with Love ❤️</p>
+            <div class="flex justify-center space-x-6 mt-3">
+               <!-- <a href="/privacy" class="hover:text-white transition duration-300">Privacy Policy</a> -->
+              <!--  <a href="/terms" class="hover:text-white transition duration-300">Terms</a> -->
+                  <a href="/contact" class="hover:text-white transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+const mobileMenuButton = document.getElementById('mobileMenuButton');
+const closeMobileMenu = document.getElementById('closeMobileMenu');
+const mobileMenu = document.getElementById('mobileMenu');
+
+// Toggle menu when hamburger is clicked
+mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');      // toggles open/close
+    mobileMenuButton.classList.toggle('active'); // animate hamburger
+});
+
+// Close menu when "X" button is clicked
+closeMobileMenu.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    mobileMenuButton.classList.remove('active');
+});
+
+// Close mobile menu when a link is clicked
+mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileMenuButton.classList.remove('active');
+    });
+});
+
+// Optional: Close menu if clicking outside
+document.addEventListener('click', (e) => {
+    if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+        mobileMenu.classList.remove('active');
+        mobileMenuButton.classList.remove('active');
+    }
+});
+
+        // Scroll to top functionality
+        const scrollTopButton = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopButton.classList.add('active');
+            } else {
+                scrollTopButton.classList.remove('active');
+            }
+        });
+        
+        scrollTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Image loading animation
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('load', () => {
+                img.style.animation = 'fadeIn 0.5s ease-in-out';
+            });
+        });
+        
+        // Add animation to cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.8s ease-in-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card-hover').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Offers - ChickoHub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-yellow-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-yellow-600 p-4 shadow-lg flex justify-between items-center sticky top-0 z-50">
+    <h1 class="text-2xl font-bold text-white">🐔 ChickoHub</h1>
+    <div class="hidden md:flex space-x-6 text-white font-medium">
+      <a href="/" class="hover:text-gray-200">Home</a>
+      <a href="/menu" class="hover:text-gray-200">Menu</a>
+      <a href="/offers" class="hover:text-gray-200">Offers</a>
+      <a href="/about" class="hover:text-gray-200">About</a>
+      <a href="/contact" class="hover:text-gray-200">Contact</a>
+  
+    </div>
+  </nav>
+
+  <!-- Offers -->
+  <section class="max-w-6xl mx-auto py-12 px-6 text-center">
+    <h2 class="text-4xl font-bold text-yellow-700">🔥 Hot Deals</h2>
+    <p class="text-gray-600 mt-2">Grab the best offers before they’re gone!</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition">
+        <h3 class="text-xl font-bold text-yellow-700">Weekend Combo</h3>
+        <p class="text-gray-600 mt-2">Buy 1kg Curry Cut & get 250g Wings FREE.</p>
+        <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg">Order Now</a>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition">
+        <h3 class="text-xl font-bold text-yellow-700">Student Special</h3>
+        <p class="text-gray-600 mt-2">Flat 20% off for students every Monday.</p>
+        <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg">Order Now</a>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition">
+        <h3 class="text-xl font-bold text-yellow-700">Family Feast</h3>
+        <p class="text-gray-600 mt-2">Order above ₹1000 & get 15% OFF.</p>
+        <a href="/order" class="mt-4 inline-block bg-yellow-600 text-white py-2 px-4 rounded-lg">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-yellow-600 text-white text-center py-6 mt-12">
+    <p>&copy; 2025 ChickoHub | Fresh Chicken Delivered with Love ❤️</p>
+  </footer>
+
+</body>
+</html>
